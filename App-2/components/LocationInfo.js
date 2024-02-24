@@ -1,44 +1,30 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Box, Text, Spinner, Heading, Badge, Divider, BadgeText, Center } from "@gluestack-ui/themed"
 
 const LocationInfo = (props) => {
     
     return (
-        <View style={styles.container}>
-            { props.location ? 
-                <View>
-                    <View style={styles.info}>
-                        <Text>{ props.location.name }</Text>
-                        <Text>{ props.location.country }</Text>
-                    </View>
-                    <View style={styles.coord}>
-                        <Text>{ props.location.coord.lat }</Text>
-                        <Text>{ props.location.coord.lon }</Text>
-                    </View>
-                </View>
-            :   <Text>Data Loading ...</Text>}
-            
-        </View>
+        <Center>
+            <Heading>METEO</Heading>
+            { props.location ?
+                <Box marginTop={8}>
+                    <Box justifyContent="center" flexDirection="row" marginBottom={16}>
+                        <Text marginRight={4}>{ props.location.name }</Text>
+                        <Divider my={1} orientation="vertical"/>
+                        <Badge size="md" variant="solid" borderRadius="$none" action="info" marginBottom={8} paddingTop={4}>
+                            <BadgeText>{ props.location.country }</BadgeText>
+                        </Badge>
+                    </Box>
+
+                    <Box justifyContent="center" flexDirection="row" gap={8}>
+                        <Text italic={true} bold={true}>{ props.location.coord.lat }'</Text>
+                        <Text italic={true} bold={true}>{ props.location.coord.lon }'</Text>
+                    </Box>
+                </Box>
+            :
+            <Spinner size="large" />
+        }
+        </Center>
     );
 }
-
-const styles = StyleSheet.create({ 
-    container: {
-        flex: 1,
-        maxHeight: '5em',
-        gap:'2em',
-        borderBottomWidth: '1px',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    info: {
-        flexDirection: 'row',
-        gap: '1em',
-        fontWeight: 'bold',
-    },
-    coord: {
-        marginTop: '0.5em',
-        color: 'gainsboro',
-    }
-  });
 
 export default LocationInfo;

@@ -1,7 +1,11 @@
+import { GluestackUIProvider, Box, Center, Divider, Text } from "@gluestack-ui/themed"
+import { config } from "@gluestack-ui/config"
+
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { FlatList } from 'react-native';
+
 import { API_KEY } from "@env";
-import WeatherList from './components/WeatherItem'
+import WeatherItem from './components/WeatherItem'
 import LocationInfo from './components/LocationInfo'
 
 import * as Location from 'expo-location';
@@ -19,29 +23,35 @@ export default function App() {
 
       setWeather(weatherData.list);
       setLocation(weatherData.city)
-      console.log(weatherData)
+      console.log('updated Weather data')
     })();
   }, []);
 
   return (
-    <View style={styles.container}>
-      <LocationInfo location={location}/>
-      
-      {
-        weather ? 
-          <FlatList
-              style={styles.listContainer}
-              data={weather} 
-              renderItem={({item})  => 
-                  <WeatherList
-                    weatherItem={item}
-                  />
-                }
-          /> 
-      : null
-      }
-      
-    </View>
+    <GluestackUIProvider config={config}>
+        <Box flex={1} bg='$tertiary50'>
+
+            <Center marginBottom={16}>
+                <LocationInfo location={location}/>
+                <Divider my="$0.5" />
+            </Center>
+            
+            
+            {
+            weather ? 
+                <FlatList
+                    data={weather} 
+                    renderItem={({item})  => 
+                        <WeatherItem
+                        weatherItem={item}
+                        />
+                    }
+                />
+            :   <Text marginTop={16}>EMPTY LIST</Text>
+            }
+        
+        </Box>
+    </GluestackUIProvider>
   );
 }
 
@@ -52,14 +62,3 @@ async function getWeather(lat, lon){
   const weather = await reponse.json();
   return weather
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    
-  },
-  listContainer: {
-    flex: 1,
-  },
-});
