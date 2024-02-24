@@ -1,12 +1,8 @@
+import { GluestackUIProvider, Center, Box, Heading, Button, ButtonText, Input, InputField } from "@gluestack-ui/themed";
+import { config } from "@gluestack-ui/config";
+
 import React, { useState } from "react"; 
-import { 
-    View, 
-    Text, 
-    Switch, 
-    FlatList, 
-    StyleSheet,
-    Pressable,
-} from "react-native";
+import { FlatList } from "react-native";
 
 import ItemList from './components/ItemList'
 
@@ -14,8 +10,6 @@ export default function App() {
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState(0);
   const [tasks, setTasks] = useState([]);
-
-  const theme = useTheme();
 
   const handleAddTask = () => {
     if (inputValue) { 
@@ -35,50 +29,44 @@ export default function App() {
     setTasks(updatedTasks);
   };
   
-  return (
-      <View> 
-          <Text style={styles.title}>ToDo App</Text>
+    return (
+        <GluestackUIProvider config={config}>
+            <Box bg="$primary100" flex={1}>
 
-          <TextInput 
-              style={styles.input} 
-              placeholder="Enter task"
-              value={inputValue} 
-              onChangeText={(text) => setInputValue(text)} 
-          />
+                <Center bg="$primary200" h={200}>
+                    <Heading>TODO APP</Heading>
 
-          <Pressable 
-              style={styles.addButton} 
-              onPress={handleAddTask}> 
-              <Text style={styles.addButtonText}> 
-                  {"Add Task"} 
-              </Text> 
-          </Pressable> 
+                    <Input
+                        variant="outline"
+                        size="md"
+                        marginTop={16}
+                        >
+                        <InputField 
+                            type="text"
+                            value={inputValue} 
+                            onChangeText={setInputValue}
+                            placeholder="Enter task" />
+                    </Input>
 
-          <FlatList
-              data={tasks} 
-              renderItem={({item})  => <ItemList onDelete={handleDeleteTask} id={item.id} title={item.title}/>} 
-              keyExtractor={(item) => item.id}
-          /> 
-      </View>
-  ); 
+                    <Button
+                        size="md"
+                        variant="solid"
+                        action="primary"
+                        marginTop={16}
+                        onPress={handleAddTask}
+                        > 
+                        <ButtonText>Add Task</ButtonText> 
+                    </Button>
+                </Center >
+
+                <Center h='100%' w='100%'>
+                    <FlatList
+                        data={tasks} 
+                        renderItem={({item})  => <ItemList onDelete={handleDeleteTask} id={item.id} title={item.title}/>} 
+                        keyExtractor={(item) => item.id}
+                    />
+                </Center>
+            </Box>
+        </GluestackUIProvider>
+    ); 
 }
-
-const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    padding: 40, 
-  },
-  title: {
-    marginTop: 40,
-    marginBottom: 40,
-  },
-  input: {
-    borderWidth: 1,
-  },
-  addButton: {
-
-  },
-  addButtonText: {
-
-  },
-}); 

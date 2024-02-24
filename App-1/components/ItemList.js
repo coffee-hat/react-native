@@ -1,49 +1,34 @@
 import React, { useState } from "react";
-import { 
-  View, 
-  Text, 
-  Switch, 
-  Pressable,
-  StyleSheet,
-} from "react-native";
+import { Center, Box, Heading, Button, ButtonText, Switch, InputField } from "@gluestack-ui/themed";
+//import { } from "react-native";
 
 const ItemList = (props) => {
     const [isFinish, setIsFinish] = useState(false);
     const handleAction = () => {setIsFinish(!isFinish)}
     return (
-      <View>
-        <Text>{props.title}</Text>
-        <View>
-            <View>
-              <Pressable onPress={() => props.onDelete(props.id)}>
-                <Text>DELETE</Text>
-              </Pressable>
-            </View>
-            
-            <Switch
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              thumbColor={isFinish ? '#f5dd4b' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={handleAction}
-              value={isFinish}
-            />
-        </View>
-      </View>
+        <Center bg="$primary500" h={100} w={300} borderRadius='$md' marginTop={16}>
+            <Heading>{props.title}</Heading>
+            <Box>
+                <Button
+                    marginTop={4}
+                    size="md" 
+                    variant="solid" 
+                    action="negative"
+                    onPress={() => props.onDelete(props.id)}
+                >
+                    <ButtonText>DELETE</ButtonText>
+                </Button>
+
+                <Switch 
+                    size="md"
+                    marginTop={4}
+                    marginBottom={4}
+                    marginLeft={25}
+                    onValueChange={handleAction}
+                    value={isFinish}
+                />
+            </Box>
+        </Center>
     );
 }
-
-const styles = StyleSheet.create({ 
-  container: {
-    display: 'flex',
-    flexDirection:'row',
-    borderWidth: 1,
-    backgroundColor: '#ced4f5',
-    marginTop: 20,
-  },
-  deleteBtn: {
-    cursor: 'pointer',
-    borderColor: 'green'
-  }
-}); 
-
 export default ItemList
