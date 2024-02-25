@@ -1,34 +1,35 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
-import { configureStore } from '@reduxjs/toolkit';
+import { Text, Box } from "@gluestack-ui/themed"
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { FlatList } from 'react-native';
 import { addCocktailsIndex } from '../redux/cocktails';
+
+import DrinkItem from '../components/DrinkItem'
 
 const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
-const cocktails = useSelector((state) => {
-    console.log(state)
-    //state.cocktail.cocktails
-})
-const dispatch = useDispatch()
-
 const Home = () => {
+    let cocktails = useSelector((state) => state.cocktail.cocktails)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         (async () => {
-            getCocktailByLetter('a')
+            const indexCocktails = await getCocktailByLetter('a')
+            dispatch(addCocktailsIndex(indexCocktails.drinks, 'a'))
         })();
-      }, []);
-    
+    }, []);
+
     return (
-        <View>
-            <Text>TEST HOME</Text>
-            {/* <FlatList>
-                data={cocktails}
-                renderItem={({item}) => <Text>{item.strDrink}</Text>}
-                keyExtractor={item => item.idDrink}
-            </FlatList> */}
-        </View>
+        <Box bg="$warmGray200" h='100%'>
+        {
+            cocktails.length?
+            <FlatList
+                data={cocktails} 
+                renderItem={({item})  => <DrinkItem drink={item}/>}
+            />
+            : <Text>NO DATA</Text>
+        }
+        </Box>
     );
 }
 
@@ -36,8 +37,8 @@ async function getCocktailByLetter(letter){
     const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`
 
     const reponse = await fetch(url);
-    const indexCocktails = await reponse.json();
-    dispatch(addCocktailsIndex(indexCocktails))
-  }
+    return reponse.json();
+}
+
 
 export default Home;

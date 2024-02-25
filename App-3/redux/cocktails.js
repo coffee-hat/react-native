@@ -6,18 +6,25 @@ const cocktailSlice = createSlice({
       cocktails: []
     },
     reducers: {
-      addCocktailsIndex: (cocktailList, letter) => {
-        cocktailList.forEach(cocktail => {
-            state.cocktails.push({
-                index: 'a',
-                cocktail: cocktail,
-                liked: false
+        addCocktailsIndex: (state, cocktailList, letter) => {
+            cocktailList.payload.forEach(cocktail => {
+                state.cocktails.push({
+                    index: letter,
+                    cocktail: cocktail,
+                    liked: false
+                })
             })
-        })
-      },
+        },
+        addFavori: (state, data) => {
+            state.cocktails.forEach(drink => {
+                if(drink.cocktail.idDrink == data.payload.id){
+                    drink.liked = data.payload.liked
+                }
+            })
+        }
     }
 })
 
-export const { addCocktailsIndex } = cocktailSlice.actions
+export const { addCocktailsIndex, addFavori } = cocktailSlice.actions
 
 export default cocktailSlice.reducer

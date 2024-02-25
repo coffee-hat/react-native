@@ -1,42 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { GluestackUIProvider } from "@gluestack-ui/themed"
+import { config } from "@gluestack-ui/config"
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 
 import Home from './screen/Home'
+import Favorit from "./screen/Favorit";
+import DrinkDetail from './components/DrinkDetail'
 
 export default function App() {
-    const Tab = createBottomTabNavigator();
     const Stack = createNativeStackNavigator();
 
     return (
-        <NavigationContainer>
-            <Provider store={store}>
-                <Tab.Navigator>
-                    <Tab.Screen name="Home" component={Home} />
-                    <Tab.Screen name="Details" component={DetailsScreen} />
-                </Tab.Navigator>
-            </Provider>
-        </NavigationContainer>
+        <GluestackUIProvider config={config}>
+            <NavigationContainer>
+                <Provider store={store}>
+                    <Stack.Navigator>
+                        <Stack.Screen name="Root" component={Root} />
+                        <Stack.Screen name="Detail" component={DrinkDetail} />
+                    </Stack.Navigator>
+                </Provider>
+            </NavigationContainer>
+        </GluestackUIProvider>
     );
 }
 
-function DetailsScreen() {
+function Root() {
+    const Tab = createBottomTabNavigator();
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-      </View>
+        <Tab.Navigator>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Favorit" component={Favorit} />
+        </Tab.Navigator>
     );
 }
   
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
