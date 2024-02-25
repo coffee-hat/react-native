@@ -1,4 +1,4 @@
-import { Text, Box } from "@gluestack-ui/themed"
+import { Text, Box, Button, ButtonText } from "@gluestack-ui/themed"
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FlatList } from 'react-native';
@@ -25,7 +25,7 @@ const Home = () => {
             cocktails.length?
             <FlatList
                 data={cocktails} 
-                renderItem={({item})  => <DrinkItem drink={item}/>}
+                renderItem={({item}) => <DrinkItem drink={item}/>}
             />
             : <Text>NO DATA</Text>
         }

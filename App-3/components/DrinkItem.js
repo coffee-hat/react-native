@@ -1,12 +1,13 @@
-import { Text, Box, Center, Image, Button, ButtonIcon, FavouriteIcon, CloseIcon } from "@gluestack-ui/themed";
+import { Text, Box, Center, Image, Button, ButtonIcon, FavouriteIcon, CloseIcon, ButtonText } from "@gluestack-ui/themed";
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { addFavori } from '../redux/cocktails';
+import { useNavigation } from '@react-navigation/native';
 
-const DrinkItem = (props) => {
-    const cocktail = props.drink.cocktail
+const DrinkItem = ({drink}) => {
+    const [isliked, setLiked] = useState(drink.liked);
     const dispatch = useDispatch()
-    const [isliked, setLiked] = useState(props.drink.liked);
+    const navigation = useNavigation()
 
     return (
         <Center>
@@ -25,7 +26,7 @@ const DrinkItem = (props) => {
                     borderRadius="$md"
                     alt='drink thumbnail'
                     source={{
-                        uri: props.drink.cocktail.strDrinkThumb,
+                        uri: drink.cocktail.strDrinkThumb,
                     }}
                 />
 
@@ -38,7 +39,7 @@ const DrinkItem = (props) => {
                     alignItems="center"
                 >
                         
-                    <Text bold={true} fontSize={24}>{cocktail.strDrink}</Text>
+                    <Text bold={true} fontSize={24}>{drink.cocktail.strDrink}</Text>
                     
                     <Button 
                         size="md" 
@@ -47,7 +48,7 @@ const DrinkItem = (props) => {
                         borderRadius="$full"
                         marginTop={3}
                         onPress={() => {
-                            dispatch(addFavori({id: cocktail.idDrink, liked: !isliked}))
+                            dispatch(addFavori({id: drink.cocktail.idDrink, liked: !isliked}))
                             setLiked(!isliked)
                         }}
                     >
@@ -57,6 +58,16 @@ const DrinkItem = (props) => {
                             :   <ButtonIcon as={FavouriteIcon} m="$2" w="$4" h="$4"/>
                         }
                         
+                    </Button>
+                    <Button
+                        size="md" 
+                        variant="solid" 
+                        action="negative" 
+                        borderRadius="$full"
+                        marginTop={3}
+                        onPress={() => navigation.navigate('Detail', {cocktail: drink.cocktail})}
+                    >
+                        <ButtonText>Detail</ButtonText>
                     </Button>
       
                 </Box>
